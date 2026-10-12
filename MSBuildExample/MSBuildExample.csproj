@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <!-- Вариант 3: переменная в PropertyGroup -->
+  <PropertyGroup>
+    <MyMessage>Конфигурация: $(Configuration)</MyMessage>
+  </PropertyGroup>
+
+  <!-- Таргет до BeforeBuild -->
+  <Target Name="MyCustomBeforeTarget" BeforeTargets="BeforeBuild">
+    <Message Text="Выполняется MyCustomBeforeTarget" Importance="high" />
+  </Target>
+
+  <!-- Основной BeforeBuild: сообщение + переменная -->
+  <Target Name="MyBeforeBuild" BeforeTargets="BeforeBuild">
+    <Message Text="Сборка начинается..." Importance="high" />
+    <Message Text="$(MyMessage)" Importance="high" />
+  </Target>
+
+  <!-- Таргет после BeforeBuild -->
+  <Target Name="MyCustomAfterTarget" AfterTargets="BeforeBuild">
+    <Message Text="Выполняется MyCustomAfterTarget" Importance="high" />
+  </Target>
+
+  <!-- Условия по конфигурации -->
+  <Target Name="ConfigurationMessages" BeforeTargets="BeforeBuild">
+    <Message Text="Debug mode" Condition="'$(Configuration)' == 'Debug'" Importance="high" />
+    <Message Text="Release mode" Condition="'$(Configuration)' == 'Release'" Importance="high" />
+  </Target>
+
+  <!-- Проверка наличия App.config -->
+  <Target Name="CheckFileExistence" BeforeTargets="Build">
+    <Error Text="Файл App.config не найден!" Condition="!Exists('App.config')" />
+  </Target>
+
+  <!-- Копирование App.config после сборки (исправлено!) -->
+  <Target Name="CopyConfig" AfterTargets="Build">
+    <Copy SourceFiles="App.config" DestinationFolder="$(OutputPath)" />
+    <Copy SourceFiles="App.config" DestinationFiles="$(OutputPath)\App.test.config" />
+  </Target>
+
+</Project>
