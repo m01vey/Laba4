@@ -39,7 +39,7 @@
     <Error Text="Файл App.config не найден!" Condition="!Exists('App.config')" />
   </Target>
 
-  <!-- Копирование App.config после сборки (исправлено!) -->
+  <!-- Копирование App.config после сборки -->
   <Target Name="CopyConfig" AfterTargets="Build">
     <Copy SourceFiles="App.config" DestinationFolder="$(OutputPath)" />
     <Copy SourceFiles="App.config" DestinationFiles="$(OutputPath)\App.test.config" />
